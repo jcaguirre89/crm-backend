@@ -11,7 +11,9 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-environment = os.getenv("DJANGO_ENVIRONMENT", "production")
+from decouple import config
+
+environment = config("DJANGO_ENVIRONMENT", default="production")
 
 if environment.lower() == 'development':
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "backend.settings.dev")
