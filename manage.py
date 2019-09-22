@@ -1,9 +1,10 @@
 #!/usr/bin/env python
 import os
 import sys
+from decouple import config
 
 if __name__ == "__main__":
-    environment = os.getenv("DJANGO_ENVIRONMENT", "production")
+    environment = config("DJANGO_ENVIRONMENT", default="production")
     if environment.lower() == 'development':
         os.environ.setdefault("DJANGO_SETTINGS_MODULE", "backend.settings.dev")
     else:

@@ -2,6 +2,14 @@ import os
 
 from backend.settings.common import *
 
+
+DATABASES = {
+    "default": dj_database_url.parse(config("DATABASE_URL"), conn_max_age=600)
+}
+
+ENVIRONMENT = os.getenv("DJANGO_ENVIRONMENT", "production")
+print(ENVIRONMENT)
+
 DEBUG = False
 ALLOWED_HOSTS = ['*']
 
