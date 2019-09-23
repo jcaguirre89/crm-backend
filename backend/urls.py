@@ -2,7 +2,7 @@ from django.urls import path, re_path, include, reverse_lazy
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.views.generic.base import RedirectView, TemplateView
-from rest_framework_nested import routers
+from rest_framework import routers
 from rest_framework.authtoken import views
 from users.views import UserViewSet
 from crm.views import (
@@ -19,26 +19,15 @@ from rest_framework.documentation import include_docs_urls
 router = routers.DefaultRouter()
 router.register(r"users", UserViewSet, "user")
 router.register(r"companies", CompanyViewSet, "company")
-
-company_router = routers.NestedDefaultRouter(router, r"companies", lookup="company")
-company_router.register(r"notes", CompanyNoteViewSet, base_name="company-note")
-company_router.register(r"contacts", ContactViewSet, base_name="company-contact")
-company_router.register(r"deals", DealViewSet, base_name="company-deal")
-
-contact_router = routers.NestedDefaultRouter(
-    company_router, r"contacts", lookup="contact"
-)
-contact_router.register(r"notes", ContactNoteViewSet, base_name="contact-note")
-
-deal_router = routers.NestedDefaultRouter(company_router, r"deals", lookup="deal")
-deal_router.register(r"notes", DealNoteViewSet, base_name="deal-note")
+router.register(r"contacts", ContactViewSet, "contact")
+router.register(r"deals", DealViewSet, "deal")
+router.register(r"company-notes", CompanyNoteViewSet, "company-note")
+router.register(r"contact-notes", ContactNoteViewSet, "contact-note")
+router.register(r"deal-notes", DealNoteViewSet, "deal-note")
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/v1/", include(router.urls)),
-    path("api/v1/", include(company_router.urls)),
-    path("api/v1/", include(contact_router.urls)),
-    path("api/v1/", include(deal_router.urls)),
     path("api-token-auth/", views.obtain_auth_token),
     path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),
     path(
