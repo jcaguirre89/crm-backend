@@ -7,4 +7,3 @@ DATABASES = {
 }
 
 ENVIRONMENT = os.getenv("DJANGO_ENVIRONMENT", "development")
-print(ENVIRONMENT)
