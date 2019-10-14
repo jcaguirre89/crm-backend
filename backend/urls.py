@@ -3,8 +3,8 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.views.generic.base import RedirectView, TemplateView
 from rest_framework import routers
-from rest_framework.authtoken import views
-from users.views import UserViewSet
+from rest_framework.authtoken import views as auth_views
+from users.views import UserViewSet, CheckLogin
 from crm.views import (
     CompanyViewSet,
     CompanyNoteViewSet,
@@ -28,7 +28,8 @@ router.register(r"deal-notes", DealNoteViewSet, "deal-note")
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/v1/", include(router.urls)),
-    path("api-token-auth/", views.obtain_auth_token),
+    path("api-token-auth/", auth_views.obtain_auth_token),
+    path("auth/check-login/", CheckLogin.as_view(), name='check-login'),
     path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),
     path(
         "openapi/",
