@@ -1,3 +1,5 @@
+.envs/.production/
+*.pid
 __pycache__/
 .env
 db.sqlite3
