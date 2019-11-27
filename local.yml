@@ -3,6 +3,7 @@ version: '3'
 volumes:
   local_postgres_data: {}
   local_postgres_data_backups: {}
+  pgadmin: {}
 
 services:
   django: &django
@@ -27,9 +28,23 @@ services:
       context: .
       dockerfile: ./compose/production/postgres/Dockerfile
     image: crm_backend_production_postgres
+    ports:
+      - "5432:5432"
     volumes:
       - local_postgres_data:/var/lib/postgresql/data
       - local_postgres_data_backups:/backups
+    env_file:
+      - ./.envs/.local/.postgres
+
+  pgadmin:
+    restart: always
+    image: dpage/pgadmin4
+    depends_on:
+      - postgres
+    ports:
+      - "8080:80"
+    volumes:
+      - pgadmin:/var/lib/pgadmin
     env_file:
       - ./.envs/.local/.postgres
 
