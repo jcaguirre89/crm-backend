@@ -1,13 +1,27 @@
+from django.contrib.auth import get_user_model
 from django.contrib import admin
-from .models import Company, Deal, Contact, CompanyNote, DealNote, ContactNote
+from .models import (
+    Deal,
+    Contact,
+    DealNote,
+    ContactNote,
+    Checklist,
+    IC_Member,
+    Status,
+    Country,
+    Industry,
+    Sector,
+)
 
-from django.conf import settings
-
-User = settings.AUTH_USER_MODEL
+User = get_user_model()
 
 
-class DealInline(admin.TabularInline):
-    model = Deal
+class ChecklistInline(admin.TabularInline):
+    model = Checklist
+
+
+class DealNoteInline(admin.TabularInline):
+    model = DealNote
     extra = 0
 
 
@@ -16,13 +30,16 @@ class ContactInline(admin.TabularInline):
     extra = 0
 
 
-class CompanyAdmin(admin.ModelAdmin):
-    inlines = [DealInline, ContactInline]
+class DealAdmin(admin.ModelAdmin):
+    inlines = [ChecklistInline, ContactInline, DealNoteInline]
 
 
-admin.site.register(Company, CompanyAdmin)
-admin.site.register(CompanyNote)
+admin.site.register(Country)
+admin.site.register(Industry)
+admin.site.register(Sector)
+admin.site.register(Status)
+admin.site.register(IC_Member)
 admin.site.register(ContactNote)
 admin.site.register(DealNote)
 admin.site.register(Contact)
-admin.site.register(Deal)
+admin.site.register(Deal, DealAdmin)

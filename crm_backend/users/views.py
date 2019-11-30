@@ -26,6 +26,16 @@ class UserViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticatedOrReadOnly]
 
 
+class Me(APIView):
+    """ Return current user """
+    allowed_methods = ['GET']
+    permission_classes = [AllowAny]
+
+    def get(self, request, format=None):
+        serializer = UserSerializer(request.user)
+        return Response(serializer.data)
+
+
 class CheckLogin(APIView):
     """
     Check if User with given Token exists

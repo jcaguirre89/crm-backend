@@ -1,11 +1,11 @@
-from .models import Company, Deal, Contact, CompanyNote, DealNote, ContactNote
+from .models import Deal, Contact, DealNote, ContactNote, Checklist
 from rest_framework import serializers
 
 
-class CompanyNoteSerializer(serializers.ModelSerializer):
+class ChecklistSerializer(serializers.ModelSerializer):
     class Meta:
-        model = CompanyNote
-        fields = ["id", "title", "content"]
+        model = Checklist
+        fields = '__all__'
 
 
 class DealNoteSerializer(serializers.ModelSerializer):
@@ -20,20 +20,12 @@ class ContactNoteSerializer(serializers.ModelSerializer):
         fields = ["id", "title", "content"]
 
 
-class CompanySerializer(serializers.ModelSerializer):
-    notes = CompanyNoteSerializer(many=True, read_only=True)
-
-    class Meta:
-        model = Company
-        fields = ["id", "name", "country", "industry", "user", "notes"]
-
-
 class DealSerializer(serializers.ModelSerializer):
     notes = DealNoteSerializer(many=True, read_only=True)
 
     class Meta:
         model = Deal
-        fields = ["id", "company", "user", "country", "industry", "status", "notes"]
+        fields = ["id", "user", "country", "industry", "status", "notes"]
 
 
 class ContactSerializer(serializers.ModelSerializer):
@@ -41,4 +33,4 @@ class ContactSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Contact
-        fields = ["id", "company", "user", "name", "email", "linkedin", "notes"]
+        fields = ["id", "deal", "user", "first_name", "last_name", "email", "linkedin", "notes"]

@@ -1,32 +1,12 @@
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from .serializers import (
-    CompanySerializer,
-    CompanyNoteSerializer,
     ContactSerializer,
     ContactNoteSerializer,
     DealSerializer,
     DealNoteSerializer,
 )
-from .models import Company, Deal, Contact, CompanyNote, DealNote, ContactNote
-
-
-class CompanyViewSet(viewsets.ModelViewSet):
-    """ Company CRUD """
-
-    serializer_class = CompanySerializer
-    queryset = Company.objects.all()
-    permission_classes = [IsAuthenticated]
-
-
-class CompanyNoteViewSet(viewsets.ModelViewSet):
-    """ CompanyNote CRUD """
-
-    serializer_class = CompanyNoteSerializer
-    permission_classes = [IsAuthenticated]
-
-    def get_queryset(self):
-        return CompanyNote.objects.filter(company=self.kwargs["company_pk"])
+from .models import Deal, Contact, DealNote, ContactNote
 
 
 class ContactViewSet(viewsets.ModelViewSet):
@@ -36,7 +16,11 @@ class ContactViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return Contact.objects.filter(company=self.kwargs["company_pk"])
+        queryset = Contacts.objects.all()
+        deal_pk = self.request.query_params.get('deal', None)
+        if deal_pk is not None:
+            queryset = queryset.filter(deal__pk=deal_pk)
+        return queryset
 
 
 class ContactNoteViewSet(viewsets.ModelViewSet):
@@ -55,9 +39,6 @@ class DealViewSet(viewsets.ModelViewSet):
     serializer_class = DealSerializer
     model = Deal
     permission_classes = [IsAuthenticated]
-
-    def get_queryset(self):
-        return Deal.objects.filter(company=self.kwargs["company_pk"])
 
 
 class DealNoteViewSet(viewsets.ModelViewSet):
