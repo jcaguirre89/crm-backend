@@ -38,3 +38,13 @@ app like Postman that allows you to include Authorization headers. This header m
 To get started, run the createsuperuser mgt. command and then create a token by sending a POST request to 
 `localhost:8000/api-token-auth` with the username and password in the body, or by going directly to the
 django admin in `localhost:8000/admin` and manually creating one.
+
+```
+curl -X POST \
+  http://localhost:8000/api-token-auth/ \
+  -H 'Content-Type: application/json' \
+  -H 'Host: localhost:8000' \
+  -d '{
+	"username": "admin@admin.com",
+	"password": "myadminpassword"
+}'
