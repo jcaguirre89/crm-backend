@@ -39,6 +39,7 @@ class DealViewSet(viewsets.ModelViewSet):
     serializer_class = DealSerializer
     model = Deal
     permission_classes = [IsAuthenticated]
+    queryset = Deal.objects.all()
 
 
 class DealNoteViewSet(viewsets.ModelViewSet):

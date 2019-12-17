@@ -25,7 +25,7 @@ class DealSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Deal
-        fields = ["id", "user", "country", "industry", "status", "notes"]
+        fields = ["id", "user", "name", "country", "industry", "status", "notes"]
 
 
 class ContactSerializer(serializers.ModelSerializer):
