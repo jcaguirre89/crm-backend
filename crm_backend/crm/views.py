@@ -1,5 +1,7 @@
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+from rest_framework import status
+from rest_framework.response import Response
 from .serializers import (
     ContactSerializer,
     ContactNoteSerializer,
@@ -38,8 +40,16 @@ class DealViewSet(viewsets.ModelViewSet):
 
     serializer_class = DealSerializer
     model = Deal
-    permission_classes = [IsAuthenticated]
+    permission_classes = []
     queryset = Deal.objects.all()
+
+    def create(self, request, *args, **kwargs):
+        data = dict(**request.data, user=request.user.pk)
+        serializer = self.get_serializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
 class DealNoteViewSet(viewsets.ModelViewSet):
